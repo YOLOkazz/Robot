@@ -1,6 +1,6 @@
 # robot.jl
 
-# DATE 2020 08 17 22-18
+# DATE 2020 09 08 17-01
 
 module HorizonSideRobot # "робот на клетчатом поле со сторонами горизонта"
 
@@ -307,6 +307,8 @@ module SituationData
         # Изменения должны отображаться в тех же самых координатных осях, где они и были произведены, поэтому обязательно должно быть 
         # newfig==false
         save(BUFF_SITUATION, file)
+        savefig("situation.png";format="png")
+        #, facecolor=rcParams["figure.facecolor"], edgecolor=’w’, orientation=’portrait’, papertype=None, transparent=False, bbox_inches=None, pad_inches=0.1)
     end # function handle_button_press_event!
     
 
@@ -314,6 +316,7 @@ module SituationData
     # - открывает обстановку, соответствующей структуре данных sit, в НОВОМ окне
     # - обеспечивает возможность редактирования обстановки с помощью мыши
     # - результат сохраняет в файле file 
+    # - одновременно с этим обстановка сохраняется в файле "situation.png" (в формате png)
         global BUFF_SITUATION, IS_FIXED_ROBOT_POSITION
         BUFF_SITUATION=sit
         draw(BUFF_SITUATION; newfig=true)
@@ -341,13 +344,14 @@ using .SituationData
 
 .    - в третьем случае - обстановка загружается из указанного файла
 
--- Если animate=true, то при этом открывается окно с соответствующей начальной обстановкой, 
-иначе просто создается объект, соодержащий данные, определяющие эту обстановку (визуализации обстановки в этом случае нет).
+-- Если animate=true, то при этом открывается окно с соответствующей начальной обстановкой 
+(которую можно будет редактировать, и результат редактирования будет сохраняться в файлах "untitled.sit", "situation.png"). 
+Иначе просто создается объект, соодержащий данные, определяющие эту обстановку (визуализации обстановки в этом случае нет).
 
 Командный интерфейс исполнителя (объекта) типа Robot: `mowe`, `isboarder`, `putmarker`, `ismarker`, `temperature`, `show`, `show!` (см. help)
 
 Для подготовительной работы с sit-файлами (в этих файлах сохраняется данные с информацией о некоторой обстановке на поле с роботом) 
-имеются специальные функции: `show`, 'sitedit`, 'sitcreate' (см. help)
+имеются специальные функции: `show!`, 'sitedit`, 'sitcreate' (см. help)
 
 """
 mutable struct Robot
@@ -506,6 +510,7 @@ save(r::Robot, outfile::AbstractString)=save(r.situation,outfile)
 
 -- предназначена для визуального (с помощью мыши) редактирования обстановки на поле с роботом, предварительно сохраненной в sit-файле. 
 Результат редактирования сохораняется в выходном sit-файле (который по умолчанию совпадает с входным sit-файлом)    
+Одновременно с этим обстановка сохраняется также в файле "situation.png" (в формате png)
 """
 function sitedit(infile::AbstractString; outfile=infile)
     global BUFF_SITUATION, IS_FIXED_ROBOT_POSITION
@@ -517,7 +522,8 @@ end
     sitcreate(num_rows::Integer,num_colons::Integer; newfile="untitled.sit")::Nothing
 
 -- предназначена для создания и визуального (с помощью мыши) редактирования нового sit-файле (содержащего данные некоторой обстановки на поле сроботом). 
-По умолчанию имя создаваемого файла - "untitled.sit"    
+По умолчанию имя создаваемого файла - "untitled.sit" 
+Одновременно с этим обстановка сохраняется также в файле "situation.png" (в формате png)   
 """    
 sitcreate(num_rows::Integer,num_colons::Integer; newfile="untitled.sit") = sitedit!(Situation((num_rows, num_colons)), newfile)
 
@@ -531,7 +537,7 @@ using .HorizonSideRobot
 
 @info "\n*** Включен код с определениями соледующих типов\n\n\t1. @enum HorizonSide Nord=0 West=1 Sud=2 Ost=3 - \"перечисление\", определяет стороны горизонта на клетчатом поле с роботом: \nNord - Север (вверху), West - Запад (слева), Sud - Юг (внизу), Ost - Восток (справа)\n\n\t2. Robot - тип, позволяющий создавать исполнителей \"Робот на клетчатом поле со сторонами горизонта\" \nДля ознакомления со способами использования конструктора Robot и режимами работы см. help?>Robot \n(для перехода в режим help следует набрать в REPL: julia>?+<enter>)\n\n*** Более детальную информацию можно найти на https://github.com/Vibof/Robot"
 
-const ROBOT_VERSION = "2020 09 02 19-25"
+const ROBOT_VERSION = "2020 09 08 17-01"
 
 #inverse(side::HorizonSide) = HorizonSide(mod(Int(side)+2, 4)) 
 #left(side::HorizonSide) = HorizonSide(mod(Int(side)+1, 4))
