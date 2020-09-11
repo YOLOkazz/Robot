@@ -351,7 +351,7 @@ using .SituationData
 Командный интерфейс исполнителя (объекта) типа Robot: `move!`, `isboarder`, `putmarker`, `ismarker`, `temperature`, `show`, `show!` (см. help)
 
 Для подготовительной работы с sit-файлами (в этих файлах сохраняется данные с информацией о некоторой обстановке на поле с роботом) 
-имеются специальные функции: `show!`, 'sitedit`, 'sitcreate' (см. help)
+имеются специальные функции: `show!`, `sitedit`, `sitcreate` (см. help)
 
 """
 mutable struct Robot
